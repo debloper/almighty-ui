@@ -44,6 +44,7 @@ export class ToolbarPanelComponent implements OnInit, AfterViewInit {
   spaceSubscription: Subscription = null;
 
   filterConfig: FilterConfig;
+  filterFields: FilterField[];
   toolbarConfig: ToolbarConfig;
 
   constructor(
@@ -76,21 +77,35 @@ export class ToolbarPanelComponent implements OnInit, AfterViewInit {
       }
     });
 
-    // this.filterService.getFilters().then(response => {
-    //   console.log(response);
-    // });
+    this.filterService
+        .getFilters()
+        .subscribe(
+          response => {
+
+            // Reports fetched filters, works fine.
+            console.log("Filters:", response);
+
+            // Remapping of filter-items in order to match FilterField
+            // Breaks queries: feature has to be implemented in used module
+            this.filterFields = response.map(function (item) {
+              let aField = {
+                id: item.type,
+                title: item.attributes.title,
+                placeholder: item.attributes.description,
+                type: 'select',
+                queries: [{
+                  id: '1',
+                  value: 'Needs update in ngx-widgets::toolbar'
+                }]
+              } as FilterField;
+              return aField;
+            });
+          },
+          error => { console.log(error); }
+        );
 
     this.filterConfig = {
-      fields: [{
-        id: 'user',
-        title:  'User',
-        placeholder: 'Filter by Assignee...',
-        type: 'select',
-        queries: [{
-          id:  '1',
-          value: 'Assigned to Me'
-        }]
-      }] as FilterField[],
+      fields: this.filterFields as FilterField[],
       appliedFilters: [],
       resultsCount: -1, // Hide
       selectedCount: 0,
