@@ -10,19 +10,6 @@
     class="fa fa-angle-down margin-right-15"
     (click)="toggleChildrenDisplay(iteration)">
   </span>
-  <a [routerLink]="[]" [queryParams]="addRemoveQueryParams(iteration.id)" class="f8-itr__header">
-    <div class="truncate padding-right-15">
-      <span class="f8-itr-name truncate">{{iteration.name | truncate : 15}}</span>
-      <span *ngIf="iteration.isActive" class="active-tag">[Active]</span>
-    </div>
-    <div class="f8-itr-status">
-      <span>
-        {{iteration.startAt ? (iteration.startAt | date:longDate) : 'Set start date'}}
-        -
-        {{iteration.endAt ? (iteration.endAt | date:longDate) : 'Set end date'}}
-      </span>
-    </div>
-  </a>
   <div class="dropdown-kebab-pf pull-right dropdown"
     dropdown>
     <button class="btn btn-link dropdown-toggle"
@@ -35,8 +22,8 @@
     <ul class="dropdown-menu-right dropdown-menu"
       *dropdownMenu>
       <li>
-        <a class="pointer" (click)="editIteration(iteration)"
-          >
+        <a class="pointer" 
+          (click)="editIteration(iteration)">
           Edit {{ iteration.name | truncate : 15 }}
         </a>
       </li>
@@ -54,5 +41,20 @@
       </li>
     </ul>
   </div>
+  <a class="f8-itr__header"
+    [routerLink]="[]" 
+    [queryParams]="addRemoveQueryParams(iteration.id)">
+    <div class="truncate padding-right-15">
+      <span class="f8-itr-name truncate">{{iteration.name | truncate : 15}}</span>
+      <span *ngIf="iteration.isActive" class="active-tag">[Active]</span>
+    </div>
+    <div class="f8-itr-status">
+      <span>
+        {{iteration.startAt ? (iteration.startAt | date:longDate) : 'Set start date'}}
+        -
+        {{iteration.endAt ? (iteration.endAt | date:longDate) : 'Set end date'}}
+      </span>
+    </div>
+  </a>
 </div>
 
